@@ -12,6 +12,11 @@
 function constructOptions() {
   var checkbox = document.querySelector("input[id=mainBtnChk]");
 
+  chrome.storage.sync.get(['app'], function(result) {
+      checkbox.checked = result.app;
+      console.log("init mainButton: " + result.app);
+  });
+
   checkbox.addEventListener( 'change', function() {
     var isOn = this.checked;
     chrome.storage.sync.set({app: isOn}, function() {

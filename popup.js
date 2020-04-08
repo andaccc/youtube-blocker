@@ -1,15 +1,16 @@
-  let changeColor = document.getElementById('changeColor');
+function constructOptions() {
+  var checkbox = document.querySelector("input[id=mainBtnChk]");
 
-  chrome.storage.sync.get('color', function(data) {
-    changeColor.style.backgroundColor = data.color;
-    changeColor.setAttribute('value', data.color);
+  chrome.storage.sync.get(['app'], function(result) {
+    checkbox.checked = result.app;
   });
 
-  changeColor.onclick = function(element) {
-    let color = element.target.value;
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-      chrome.tabs.executeScript(
-          tabs[0].id,
-          {code: 'document.body.style.backgroundColor = "' + color + '";'});
+  checkbox.addEventListener( 'change', function() {
+    var isOn = this.checked;
+    chrome.storage.sync.set({app: isOn}, function() {
+      console.log('app is on: ' + isOn);
     });
-  };
+  });
+}
+
+constructOptions();
